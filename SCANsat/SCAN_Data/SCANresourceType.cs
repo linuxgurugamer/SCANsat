@@ -11,7 +11,6 @@
 */
 #endregion
 
-using palette = SCANsat.SCAN_UI.UI_Framework.SCANpalette;
 using UnityEngine;
 
 namespace SCANsat.SCAN_Data
@@ -20,14 +19,22 @@ namespace SCANsat.SCAN_Data
 	{
 		private string name;
 		private SCANtype type;
+        private Color32 color;
 
-		internal SCANresourceType(string s, int i)
+		internal SCANresourceType(string s, int i, Color32 c)
 		{
 			name = s;
 			type = (SCANtype)i;
+            color = c;
+
 			if ((type & SCANtype.Everything_SCAN) != SCANtype.Nothing)
 			{
-				Debug.LogWarning("[SCANsat] Attempt To Override Default SCANsat Sensors; Resetting Resource Scanner Type To 0");
+				Debug.LogWarning("[SCANsat] Attempt To Override Default SCANsat Sensors; Resetting Resource Scanner Type [" + i + "] To 0");
+				type = SCANtype.Nothing;
+			}
+			else if ((type & SCANtype.FuzzyResources) != SCANtype.Nothing)
+			{
+				Debug.LogWarning("[SCANsat] Attempt To Override M700 Resource Scanner; Resetting Resource Scanner Type [" + i + "] To 0");
 				type = SCANtype.Nothing;
 			}
 		}
@@ -41,6 +48,11 @@ namespace SCANsat.SCAN_Data
 		{
 			get { return type;}
 		}
+
+        public Color32 Color
+        {
+            get { return color; }
+        }
 
 	}
 }

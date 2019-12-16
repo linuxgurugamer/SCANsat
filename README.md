@@ -12,8 +12,7 @@
 [![][shield:support-toolbar]][toolbar:release]&nbsp;
 [![][shield:support-karbonite]][karbonite:release]&nbsp;
 [![][shield:support-usi]][usi:release]&nbsp;
-[![][shield:support-epl]][epl:release]&nbsp;
-[![][shield:support-ctt]][ctt:release]&nbsp;
+[![][shield:support-kopernicus]][kopernicus:release]&nbsp;
 [![][shield:support-ccfg]][cconfig:release]&nbsp;
 [![][shield:support-mechjeb]][mechjeb:release]&nbsp;
 
@@ -29,35 +28,44 @@
   * [c. Other Add-Ons][1c]
 * [2. Types of Scans][2]
   * [a. Native SCANsat][2a]
-  * [b. Resource Scans][2b]
-  * [c. Resource Settings][2c]
-* [3. Basic Usage][3]
-  * [a. FAQ: Finding a Good Altitude][3a]
-  * [b. Mismatched Scanners][3b]
-* [4. Big Map][4]
-  * [a. Big Map Options][4a]
-* [5. Zoom Map][5]
-  * [a. Target Selection][5a]
-  * [b. MechJeb Landing Guidance][5b]
-* [6. Instrument Window][6]
-* [7. Parts and Sensors Types][7]
-  * [a. RADAR][7a]
-  * [b. SAR][7b]
-  * [c. Multi][7c]
-  * [d. BTDT][7d]
-  * [e. MapTraq (deprecated)][7e]
-* [8. (Career Mode) Research and Development][8]
-  * [a. Minimum Scan for Science (30%)][8a]
-  * [b. Getting Maximum Science][8b]
-  * [c. Contracts][8c]
-* [9. Color Management][9]
-  * [a. Terrain Colors and Options][9a]
-  * [b. Biome Colors and Options][9b]
-  * [c. Resource Colors and Options][9c]
-* [10 Background Scanning][10]
-* [11. Time Warp][11]
-* [12. Settings Menu][12]
-* [13. Note: Data Sources][13]
+* [3. Resource Scanning][3]
+  * [a. Stock Scanning Mode][3a]
+  * [b. SCANsat Scanning Mode][3b]
+  * [c. Resource Settings][3c]
+* [4. Basic Usage][4]
+  * [a. FAQ: Finding a Good Altitude][4a]
+  * [b. Mismatched Scanners][4b]
+  * [c. Biome Map][4c]
+  * [d. Ground Track Indicators][4d]
+* [5. Big Map][5]
+  * [a. Big Map Options][5a]
+* [6. Planetary Overlay][6]
+  * [a. Terrain and Biome Overlays][6a]
+  * [b. Overlay Control Window][6b]
+* [7. Zoom Map][7]
+  * [a. Hi Def Map][7a]
+  * [b. Target Selection][7b]
+  * [c. MechJeb Landing Guidance][7c]
+* [8. Instrument Window][8]
+* [9. Raster Prop Monitor][9]
+* [10. Parts and Sensors Types][10]
+  * [a. RADAR][10a]
+  * [b. SAR][10b]
+  * [c. Multi][10c]
+  * [d. BTDT][10d]
+  * [e. MapTraq (deprecated)][10e]
+* [11. (Career Mode) Research and Development][11]
+  * [a. Minimum Scan for Science (30%)][11a]
+  * [b. Getting Maximum Science][11b]
+  * [c. Contracts][11c]
+* [12. Color Management][12]
+  * [a. Terrain Colors and Options][12a]
+  * [b. Biome Colors and Options][12b]
+  * [c. Resource Colors and Options][12c]
+* [13. Background Scanning][13]
+* [14. Time Warp][14]
+* [15. Settings Menu][15]
+* [16. Note: Data Sources][16]
 
 **WARNING**:
 
@@ -103,6 +111,8 @@ In addition to the authors, the following people have contributed:
   + (Models, Graphics, Textures) [Milkshakefiend][Milkshakefiend]
   
   + (Science results text) [madsailor][madsailor]
+  
+  + (Contracts) [severedsolo][severedsolo]
 
 #### Licenses
 
@@ -112,6 +122,8 @@ For licensing information, please see the [included LICENSE.txt][SCANsat:rel-lic
 
 ### [:top:][top] 0a. FAQs
 
+  * For some basic scanning strategies, as well as a description of resource scanning, check out the [SCANsat wiki][SCANsat:wiki]
+
   * What does SCANsat do?
     * It allows you to scan planetary bodies for terrain, biome, and resource information and generate various kinds of maps.
   * How does SCANsat affect gameplay?
@@ -120,8 +132,12 @@ For licensing information, please see the [included LICENSE.txt][SCANsat:rel-lic
     * **No!** This version is completely backwards compatible, and you current scanning state (which is stored in persistent.sfs) will be safe and sound. Nevertheless, you should make a backup copy of your game before upgading any mod.
   * Do I need to attach a part to my vessel to use SCANsat?
     * **No, but...**. You can view existing maps from any vessel, but you need to attach a scanner to add new data to the maps.
+  * What does the "field of view" mean?
+    * When a sensor is at or above its "best" altitude (but below its maximum altitude) the field of view is half of the width of the swath mapped by the instrument, if it were in orbit around Kerbin. In other words, a field of view of 5° would map swathes which are 1/36th (10°) of the planetary surface wide. The field of view is scaled for smaller bodies so that more of the surface is covered.
+  * What does the "best" altitude mean?
+    * At or above the best altitude, the sensor will operate with its listed field of view. Below this altitude the sensor suffers a linear penalty. A 10° FOV instrument with a best altitude of 500km would only have a 5° FOV at 250km.
   * [Career Mode] Does SCANsat give us science points?
-    * **Yes!** For each type of map, if you scan at least 30% of the surface, you can yse Data for partial science points; up until the maximum value at 95% map coverage.
+    * **Yes!** For each type of map, if you scan at least 30% of the surface, you can transmit that Data for partial science points; up until the maximum value at 95% map coverage.
   * [Career Mode] Is it integrated into the tech tree?
     * **Yes!** **[This link][8]** tells you which nodes unlock which parts in the tech tree.
   * [Contracts] Does SCANsat offer contracts to complete?
@@ -157,12 +173,12 @@ S.C.A.N. is proud to collaborate with other KSP mods and modding teams. Followin
 :---: | :---:
 [**MechJeb**][mechjeb:release] | [![Support for MKS][usi:logo]][usi:release]
 [**Blizzy78's Toolbar**][toolbar:release] | [![Support for Karbonite][karbonite:logo]][karbonite:release]
-[**ModuleManager**][mm:release]  | [![Support for Community Tech Tree][ctt:logo]][ctt:release]
-[**RasterPropMonitor**][rpm:release]  | [![Support for ALCOR][alcor:logo]][alcor:release]
+[**ModuleManager**][mm:release]  | [![Support for ALCOR][alcor:logo]][alcor:release]
+[**RasterPropMonitor**][rpm:release]  | 
 
 * **SCANsat**
-  * [x] [**v12.0**][SCANsat:rel-thread] SCANsat Release **version: v12.0**
-  * [x] [**v13.0**][SCANsat:dev-thread] SCANsat Dev **version: v13.0**
+  * [x] [**v16.0**][SCANsat:rel-thread] SCANsat Release **version: v16.0**
+  * [x] [**v15.0**][SCANsat:dev-thread] SCANsat Dev **version: v15.0**
 
  **MM**, **RPM**, **MechJeb**, and **Toolbar** are all **soft** dependencies. This means your experience with SCANsat will be enhanced if you are using these mods, but they are not necessary.
 
@@ -193,7 +209,7 @@ on custom parts, but this is not a requirement.
 
 #### [:top:][top] 2a. SCANsat Scans
 
-Without any resource scanning mods installed, **SCANsat** can scan for a few basic types of data. All of these (non-resource) scans are shown as indicators on the Small Map.
+**SCANsat** can scan for a few basic types of data. All of these (non-resource) scans are shown as indicators on the Small Map. For more information about basic SCANsat scanning checkout the [wiki][SCANsat:wiki]
 
 > ![][small-newMap1]
 
@@ -211,15 +227,36 @@ Anomaly | **Been There, Done That(tm)** | **BTDT**
 * The **Anomaly** data scans for anomalies from orbit, while
 * **BTDT** shows a camera view of an anomaly once you are near it
 * The **Biome** and **Anomaly** scans are combined into the multi-spectral scanner; indicated by **MULTI**
+   
+### [:top:][top] 3. Resource Scanning
+------------------------------------------
 
-#### [:top:][top] 2b. Resource Scans
+**SCANsat** will scan celestial bodies for resources using the new stock resource system. For a full description of both stack and SCANsat resource scanning methods check out the [SCANsat wiki][SCANsat:wiki].
 
-**SCANsat** will scan celestial bodies for resources using the new stock resource system.
+#### [:top:][top] 3a. Stock Scanning Mode
 
 With default resource scanning options enabled the SCANsat resource map will automatically update as soon as a **stock resource scan** is completed.
 > ![][resource-instant]
 
-Resource scans are initiated in the same way as any other scan. In this case they use the stock **Orbital Survey Scanner**.
+No further resource scanning is necessary while using stock scanning mode.
+
+#### [:top:][top] 3b. SCANsat Scanning Mode
+
+There are two levels of **SCANsat Scanning Mode**:
+* Disable **Instant Scanning** in the **Resource Settings Window**
+  * This will prevent SCANsat maps from being updated based on stock scanning coverage
+  * All stock scanning parts will continue to work as normal
+  * SCANsat resource scanning essentially works alongside stock scanning in this mode
+* Disable **Stock Scanning** in the **Resource Settings Window**
+  * This will prevent all stock scanning functions
+  * All stock scanning modules will use replacement SCANsat modules
+  * These include:
+    * The planetary resource overlays (these are available in all scanning modes)
+    * The resource abundance readouts for the right-click menu
+	* The fixed-position resource map found on the Narrow-Band scanner
+  * This **does not** affect the stock biome scanning mechanic; resource abundance accuracy is still affected by biome scanning status, the same as with stock resource scanning
+
+Resource scans are initiated in the same way as any other scan. In this case they use the stock **M700 Orbital Survey Scanner**.
 > ![][resource-scanner]
 
 Resource scanning proceeds the same way as standard SCANsat scanning instruments do. The grey scale color option generally works best when viewing resource overlays.
@@ -228,46 +265,69 @@ Resource scanning proceeds the same way as standard SCANsat scanning instruments
 The resource system can be enabled through the **SCANsat** Big Map:
 > ![][resource-walkthrough]
 
+The **M700 Orbital Survey Scanner** provides a low-detail resource map for all available surface resources. For high detail maps a specific scanner is needed for each different resource. For stock Ore the **M4435 Narrow-Band Scanner** is used; high detail scanner modules are added to other parts for addon resources as needed.
+
+The examples below show the difference between high (top) and low (bottom) resolution resource scans
+> ![][resource-bigmap-hires-full-biome]
+
+> ![][resource-bigmap-lores-full-biome]
+
 Zoom map resource overlays require that a vessel with a narrow-band scanner be present in orbit and at an inclination high enough to cover the area in the zoom map.
 > ![][resource-zoom-map-covered]
 
-If a vessel with a narrow-band scanner is not present, or its inclination is not high enough, the zoom map will not display the resource overlay.
+If a vessel with a narrow-band scanner is not present, or its inclination is not high enough, the zoom map will not display the resource overlay. The same restrictions apply to **overlay tooltips** and the **instrument window resource readout**.
 > ![][resource-zoom-map-uncovered]
 
 Resource overlays will work in IVA, too:
 > ![][resource-iva]
 
-#### [:top:][top] 2c. Resource Setting
+#### [:top:][top] 3c. Resource Settings
 
-A number of options are available in the **Settings Menu** for SCANsat resource scanning.
+A number of options are available in the **Resource Settings Menu** for SCANsat resource scanning; this window has an in-game help function activated by selecting the **?** icon in the top-right corner.
 
 > ![][resource-settings]
 
 * **Instant Resource Scan**
-   * When this option is active all resources will be fully scanned for a given planet using the stock **Orbital Survey Scanner** instrument.
-   * When disabled the SCANsat resource overlays will need to be generated using the method described above.
+   * When this option is active all resources will be fully scanned for a given planet using the stock **Orbital Survey Scanner** instrument
+   * When disabled the SCANsat resource overlays will need to be generated using the method described above
+   * When **Disable Stock Scanning** is activated the **Instant Scan** option will automatically turn off
 * **Resource Biome Lock**
-   * With this option active biomes will need to be scanned from the surface to obtain accurate resource abundance reading on SCANsat maps.
-   * When disabled all resource abundance values will be fully accurate, with no need for ground surveys.
-* **Zoom Requires Narrow Band Scanner**
-   * With this active the zoom map will only display resource overlays when a suitable **Narrow-Band Scanner** is in orbit around the planet, and its orbit covers the region showed in the zoom map.
-   * When disabled the zoom map will display resource overlays regardless of **Narrow-Band Scanner** coverage.
-* **Reset Resource Coverage**
-   * This button will erase all resource scanning data for the current planet.
-   * Regular SCANsat data will not be affected.
-   * A confirmation window will appear upon clicking the button.
+   * With this option active, biomes will need to be scanned from the surface to obtain accurate resource abundance reading on SCANsat maps
+   * When disabled all resource abundance values will be fully accurate, with no need for ground surveys
+* **Requires Narrow Band Scanner**
+   * With this active the zoom map will only display resource overlays when a suitable **Narrow-Band Scanner** is in orbit around the planet, and its orbit covers the region showed in the zoom map
+   * **Instruments Window** resource readout will require a narrow-band scanner on the current vessel within its maximum altitude limits
+   * **Planetary Overlay Tooltips** will check for any suitable vessel in orbit around the planet before showing resource abundance
+   * When disabled the zoom map, instruments window, and overlay tooltips will display resource values regardless of Narrow-Band scanner status
+* **Disable Stock Scanning** 
+   * Disables the stock orbital survey
+   * Replaces the resource concentration readout from scanners with SCANsat modules
+   * Right-click menu resource concentration readout dependent on SCANsat scanning coverage
+* **Stock Scan Threshold**
+   * Sets a threshold value for SCANsat M700 resource scans when stock scanning is disabled; can be disabled
+   * Once this value is reached a default, stock resource scan for that planet will be conducted
+   * Enter a new value, from 0-100 in the text box
+* **Reset SCANsat Resource Coverage**
+   * This button will erase all resource scanning data for the current planet
+   * Regular SCANsat data will not be affected
+   * A confirmation window will appear upon clicking the button
+* **Reset Stock Resource Scanning**
+   * Stock resource scanning data can be erased for each planet (does not affect resource biome scanning data)   
+* **SCAN Planet Overlay Quality Settings**
+   * **Interpolation** settings can be increased or decreased to increase the accuracy of overlays
+   * **Overlay Map Size** can be adjusted for higher quality, but slower maps
+   * **Coverage Transparency** adjusts the transparency of a grey overlay for areas that have been scanned but contain no resources, this makes it easier to track resource scanning progress
    
-### [:top:][top] 3. Basic Usage
+### [:top:][top] 4. Basic Usage
 ------------------------------------------
 
 Put scanner part on rocket, aim rocket at sky, launch. If your rocket is not pointing at the sky, you are probably not going to map today, because most sensors only work above 5 km.
 
 You can start scanning by selecting a SCANsat part's context menu, enabling the part. Here, you will find a **small map**.
 
-#### [:top:][top] 3a. FAQ: Finding a Good Altitude
+#### [:top:][top] 4a. FAQ: Finding a Good Altitude
 
 Watch the data indicators on the small map to determine how well your scanners are performing. The right-click context menus also contain indicators for the proper scanning altitude.
-
 
 ###### too high
 Solid ORANGE means you're too high (and therefore no data is being recorded):
@@ -281,7 +341,7 @@ Flashing ORANGE/GREEN means you're too low (and therefore you have a FOV penalty
 Solid GREEN means you're in an ideal orbit. Notice the larger swath width on the right:
 > ![][small-justright-v10]
 
-#### [:top:][top] 3b. Mismatched Scanners
+#### [:top:][top] 4b. Mismatched Scanners
 
 In these examples, the SAR and Multi sensors are not very well matched. Because the SAR sensors is ideal above 750km, and becuase it has a large field of view penalty if it's down near the ideal for Multi (250km), these sensors probably should not be used on the same scanner.
 
@@ -302,7 +362,21 @@ Be sure to remember to pack enough batteries, radioisotope generators, and solar
 ###### Static! Oh no, adjust the rabbit ears!
 > ![][small-static]
 
-### [:top:][top] 4. Big Map
+#### [:top:][top] 4c. Biome Map
+> ![][small-biome]
+
+The **Biome/Terrain** button in the top right corner can be used to toggle between the standard terrain map and a biome map
+* When in biome mode, the current biome of each vessel will be displayed if it has been scanned
+
+#### [:top:][top] 4d. Ground Track Indicators
+> ![][ground-track]
+
+When activated in the settings menu, ground track indicators are drawn for vessels around the current planet. 
+* The indicators are drawn only if at least one sensor on board the vessel is within scanning altitude
+* The indicator width on the surface represents the scanning FOV at the equator
+* The scanner with the widest FOV on a vessel is used to create the indicator 
+
+### [:top:][top] 5. Big Map
 ------------------------------------------
 
 > ![A Big Big Map][bigmap-anim-v2]
@@ -315,7 +389,7 @@ You can mouse over the big map to see what sensors have data for the location, a
 
 Right-clicking on the big map shows a magnified view around the position where you clicked. Mouse operations work inside this magnified view just like they work outside, meaning the data displayed at the bottom window applies to your position inside the magnified view, and right-clicking inside it will increase magnification. This can be useful to find landing spots which won't kill your kerbals.
 
-#### [:top:][top] 4a. Big Map Options
+#### [:top:][top] 5a. Big Map Options
 
 There are four drop-down menus along the top of the big map. These control, from left to right: 
 
@@ -334,12 +408,37 @@ The camera icon in the lower-right exports a copy of the map.
 
 The re-size icon in the lower-right corner can be dragged to re-size the map.
 
-### [:top:][top] 5. Zoom Map
+### [:top:][top] 6. Planetary Overlay
+------------------------------------------
+
+> ![][resource-planet-hires-full-biome]
+
+A separate window is used to control planetary overlay maps. These maps are drawn directly over the surface of the current planet; they use the same system as the stock resource overlays and will replace those maps if both are opened at the same time. Map coverage is dependent upon SCANsat data; only scanned areas will be displayed on the map.
+> ![][resource-planet-in-progress]
+
+#### [:top:][top] 6a. Terrain and Biome Overlays
+> ![][terrain-planet-overlay]
+
+SCANsat terrain maps can be displayed with the overlay window. These maps use the same height map data as the small SCANsat map and generate very quickly.
+
+> ![][terrain-planet-overlay-tooltip]
+
+Tooltips can be activated to show data for the location under the current mouse position while in map mode.
+
+SCANsat biome coverage can also be displayed using the overlay window.
+> ![][biome-planet-overlay]
+
+#### [:top:][top] 6b. Overlay Control Window
+> ![][resource-overlay-window]
+
+Each available resource can be selected for the planetary overlay maps, along with biome maps and terrain maps. Biome maps are currently limited to the stock color scheme without borders.
+
+### [:top:][top] 7. Zoom Map
 ------------------------------------------
 
 > ![][bigmap-zoom-open]
 
-A separate, small map can be opened from the big map by right-clicking somewhere within the big map. This new window will be centered on the mouse cursor's location and zoomed in by a factor of 10. Icons on the zoom map can be used to zoom in or out, to a minimum of 2X zoom.
+A separate, small map can be opened from the big map by right-clicking somewhere within the big map. This new window will be centered on the mouse cursor's location and zoomed in by a factor of 10. Icons on the zoom map can be used to zoom in or out, to a minimum of 2X zoom. The terrain coloring limits will are modified to use the local minimum and maximum terrain height within the zoom map's field of view; the full color spectrum will always be used in zoom maps.
 
 The zoom scale and map center can be controlled by clicking within the zoom map.
 * Left-click to zoom out and re-center the map at the mouse cursor.
@@ -353,7 +452,24 @@ The **zoom map** also features mouse-over information for the cursor location si
 Different map types, resource overlays and polar projections are all applied to the **zoom map** as well.
 > ![][zoommap-in]
 
-#### [:top:][top] 5a. Target Selection
+#### [:top:][top] 7a. Hi Def Map
+> ![][hidef-map-open]
+
+Parts with the stock ModuleHiDefCamera (i.e. the Narrow-Band Scanner) have a special SCANsat module that opens a modified zoom map.
+* This map features a low detail, grey-scale terrain map
+* It is fixed on the vessel's current position; re-syncing the map will re-center it on your current position, and clicking within the map will only change the zoom level, not the map center location
+* Zoom levels are restricted; the default is from 8X to 20X zoom
+* All available resources can be viewed using this map and selected using the **Resource Drop Down Menu**
+
+> ![][hidef-map-comp-1]
+
+The **Hi Def** map shows all standard SCANsat map overlays
+
+> ![][hidef-map-comp-2]
+
+The **Hi Def** map is limited to show only low quality terrain maps that are not dependant on SCANsat coverage
+
+#### [:top:][top] 7b. Target Selection
 > ![][zoommap-scansat-landing]
 
 The **zoom map** features an option to select and display a target site for each planet. Toggle **Target Selection Mode** by clicking on the target icon in the upper left, then select a sight 
@@ -364,7 +480,7 @@ While in map view the target site will be overlayed on the planet's surface; sho
 To clear an existing target, activate **Target Selection Mode** by clicking the target icon, then click somewhere inside of the zoom map window, but outside of the map itself.
 > ![][zoommap-clear-target]
 
-#### [:top:][top] 5b. MechJeb Landing Guidance
+#### [:top:][top] 7c. MechJeb Landing Guidance
 > ![][zoommap-mechjeb-settings]
 
 If MechJeb is installed and an additional option is available in the settings menu to activate **MechJeb Landing Guidance Mode**
@@ -377,7 +493,7 @@ and the MechJeb Landing Guidance module must be unlocked in the R&D Center.
 Landing sites selected through MechJeb will automatically show up as a waypoint on SCANsat maps.
 
 
-### [:top:][top] 6. Instrument Window
+### [:top:][top] 8. Instrument Window
 ------------------------------------------
 
 > ![][instruments-small]
@@ -385,16 +501,31 @@ Landing sites selected through MechJeb will automatically show up as a waypoint 
 The instruments window provides a readout of several types of data based on current scanning coverage.
 
 * **Location** Shows the vessel's current coordinates; not dependent on scanning coverage
+* **Target Dist.** Shows the vessel's distance to the SCANsat or MechJeb landing target; only shown when within 15km
 * **Waypoint** Shows if the vessel is inside of a current FinePrint waypoint; not dependent on scanning coverage
-* **Altitude** Shows the vessel's current altitude above the terrain; shows the current terrain altitude when landed
+* **Altitude** Shows the vessel's current altitude above the terrain; shows the current terrain altitude when landed; shows ocean depth when splashed down
 * **Slope** Shows a highly localized slope based on a 3X3 grid centered 5m around the vessel
 * **Biome** Shows the biome that the current vessel is in or over
+* **Resource** Shows the resource abundance at the current location; when more than one resource is available buttons along the sides allow for switching between these resources
 * **Anomaly** Shows the nearest anomaly and its distance from the vessel
 * **BTDT Anomaly** Shows detailed information and a crude image about the nearest anomaly; scroll the mouse wheel when positioned over the anomaly window to switch between different structures if more than one is found
 
 > ![][instruments-btdt]
 
-### [:top:][top] 7. Parts and Sensor Types
+### [:top:][top] 9. Raster Prop Monitor
+------------------------------------------
+
+> ![][rpm-multi]
+
+SCANsat includes support for IVA maps through [Raster Prop Monitor][rpm:release]. Standard RPM multi-function displays and those using the [ASET props][alcor:release] are supported.
+
+> ![][rpm-mfd-labeled]
+
+> ![][rpm-ALCOR-left]
+
+> ![][rpm-ALCOR-right]
+
+### [:top:][top] 10. Parts and Sensor Types
 ------------------------------------------
 
 | **Part** | **Scan Type** | **FOV** | Altitude (**Min**) | (**Ideal**) | (**Max**) 
@@ -405,19 +536,19 @@ The instruments window provides a readout of several types of data based on curr
 | [Been There Done That®][5d] | **Anomaly** | 1 | 0 m | 0 m | 2 km
 | [MapTraq® (deprecated)][5e] | **None** | N/A | N/A | N/A | N/A 
 
-#### [:top:][top] 7a. The RADAR Altimetry Sensor
+#### [:top:][top] 10a. The RADAR Altimetry Sensor
 > ![RADAR][vab-radar]
-#### [:top:][top] 7b. The SAR Altimetry Sensor
+#### [:top:][top] 10b. The SAR Altimetry Sensor
 > ![SAR][vab-sar]
-#### [:top:][top] 7c. The Multispectral Sensor
+#### [:top:][top] 10c. The Multispectral Sensor
 > ![Multi][vab-multi]
-#### [:top:][top] 7d. Been There Done That
+#### [:top:][top] 10d. Been There Done That
 > ![BTDT][vab-btdt]
-#### [:top:][top] 7e. MapTraq (deprecated)
+#### [:top:][top] 10e. MapTraq (deprecated)
 > ![MapTraq][vab-maptraq] 
 
 
-### [:top:][top] 8. (Career Mode) Research and Development
+### [:top:][top] 11. (Career Mode) Research and Development
 ------------------------------------------
 
 The **RADAR Altimetry** sensor can be unlocked in **Basic Science**.
@@ -428,33 +559,34 @@ The **Multispectral** sensor can be unlocked in **Advanced Exploration**.
 
 The **BTDT** sensor can be unlocked in **Field Science**.
 
-##### [:top:][top] 8a. Minimum Scan for Science
+##### [:top:][top] 11a. Minimum Scan for Science
 Once you scan at least 30% of a particular map, you can use **Analyze Data** to get delicious science:
 
 > ![30% is your minimum][science-min]
 
-##### [:top:][top] 8b. Getting Maximum Science
+##### [:top:][top] 11b. Getting Maximum Science
 Between 30% and 100%, you will get a number of science points proportional to the percentage. Really,
 the upper cutoff is 95% in case you didn't scan the whole map.
 
 > ![Scan 95% to get all science][science-max]
 
-##### [:top:][top] 8c. Contract Support
+##### [:top:][top] 11c. Contract Support
 Career mode contracts are supported through third party addons.
 
 * [Contract Configurator Forum Thread][cconfig:release]
-* [SCANsat Contract Pack][ccfgSCANsat:release]
 
-### [:top:][top] 9. Color Management
+SCANsat includes Contract Configurator contracts for scanning each planet.
+
+### [:top:][top] 12. Color Management
 ------------------------------------------
 
 > ![][color-window]
 
-SCANsat provides multiple options for map color configurations and terrain level changes.
+SCANsat provides multiple options for map color configurations and terrain level changes; this window has an in-game help function activated by selecting the **?** icon in the top-right corner.
 
 The color management window can be accessed from the big or small map with the color palette icon, or from the toolbar menu.
 
-##### [:top:][top] 9a. Terrain Colors and Options
+##### [:top:][top] 12a. Terrain Colors and Options
 On the left are the various color palettes available; there are four different styles that can be selected from the drop down menu. 
 Palettes can be customized by changing the number of colors in the palette, reversing the order, or making the palette use discrete
 color transitions, rather than the smooth gradient used by default.
@@ -467,18 +599,19 @@ There are several terrain height options available as well.
 * The **Min** and **Max** height sliders can be used to set the lower and upper cutoff values for the terrain height-to-color algorithm.
 * The **Clamp** option can be used to set a cutoff below which only the first two colors in the selected
 palette will be used for the terrain height-to-color algorithm. This is especially useful on planets where there is an ocean, as it makes the transition
-from ocean to solid terrain more pronounced.
+from ocean to solid terrain more pronounced
 
 > ![][color-clamp-terrain]
 
 All stock KSP planets have default color palette and terrain height values appropriate for the planet's terrain. Standard default values are used
 for any addon planets.
 
-##### [:top:][top] 9b. Biome Colors and Options
-Biome map colors and options can be controlled in the **Biome** tab of the window.
-* The end-point colors can be selected using the HSV color-picker; the value slider controls the brightness of the color.
-* Terrain transparency is controlled with a slider.
+##### [:top:][top] 12b. Biome Colors and Options
+Biome map colors and options can be controlled in the **Biome** tab of the window
+* The end-point colors can be selected using the HSV color-picker; the value slider controls the brightness of the color
+* Terrain transparency is controlled with a slider
 * Stock style biome maps can be used in place of SCANsat's custom colors
+* The white border around biome edges can be disabled
 
 > ![][color-biome]
 
@@ -486,16 +619,17 @@ Biomes can also be displayed using the stock color maps.
 
 > ![][color-biome-stock]
 
-##### [:top:][top] 9c. Resource Colors and Options
-Resource overlays can also be adjusted, using the **Resource** tab.
-* Resource colors are selected in the same manner as biome colors.
-* Upper and lower resource cutoff values can be adjusted with the sliders; use fine control mode for small adjustments.
-* Each resource can be adjusted separately and the values can be applied to the current planet or all planets.
-* Most planets share the same resource value settings; it is easiest to set values for all planets then set the values individually where needed (ie water has a higher value on Kerbin than elsewhere).
+##### [:top:][top] 12c. Resource Colors and Options
+Resource overlays can also be adjusted, using the **Resource** tab
+* Resource colors are selected in the same manner as biome colors
+* Upper and lower resource cutoff values can be adjusted with the sliders; use fine control mode for small adjustments
+* Each resource can be adjusted separately and the values can be applied to the current planet or all planets
+* Most planets share the same resource value settings; it is easiest to set values for all planets then set the values individually where needed (ie water has a higher value on Kerbin than elsewhere)
+* These settings also affect the **Planetary Overlay** colors
 
 > ![][color-resource]
 
-### [:top:][top] 10. Background Scanning
+### [:top:][top] 13. Background Scanning
 ------------------------------------------
 
 ![Note the background scanning (non-active vessels are scanning)][small-scan]
@@ -504,7 +638,7 @@ Unlike some other KSP scanning systems, SCANsat allows scanning with multiple
 vessels.  All online scanners scan at the same time during any scene where time progresses; no active SCANsat
 parts are necessary. 
 
-### [:top:][top] 11. Time Warp
+### [:top:][top] 14. Time Warp
 ------------------------------------------
 
 SCANsat does not interpolate satellite paths during time warp; nevertheless, due to the relatively large field of view
@@ -521,26 +655,32 @@ It starts at **1000x** and then speeds up to **10,000x**:
 
 Notice that the only gaps in coverage are those at the poles (ie, the selected inclination was not high enough to capture the poles).
 
-### [:top:][top] 12. Settings Menu
+### [:top:][top] 15. Settings Menu
 ------------------------------------------
 
 > ![][settings-window]
 
-The settings menu has a various general options
+The settings menu has a various general options; this window has an in-game help function activated by selecting the **?** icon in the top-right corner.
+* The **Resource Settings Window** can be opened
 * The marker used for **Anomalies** can be specified
 * **Background scanning** can be controlled for each planet
 * **Background scanning** resolution can be lowered for better performance (watch for short pauses when several scanners are active at very high timewarp; reducing the scanning resolution can help with this)
-* See the **[Resource Settings][2c]** section for information about resource options
-* Toggles control the availability of the **Stock App Launcher** button, and the **Tooltips** for various icons on other windows
+* **Ground Track** indicators can be toggled for the current vessel or for all vessels at the current planet
+* Toggles control the availability of the **Stock App Launcher** button, and the **Tooltips** for various icons on other windows and **Planetary Overlay Tooltips**
 * If MechJeb is installed an additional option is available to toggle the MechJeb Landing Guidance interface
 * If the windows are ever dragged off screen there is an option to **Reset All Windows** to their default positions
 * **Scanning Data** can be deleted for any or all planets; a confirmation box will appear when these options are selected
+* **Time Warp Resolution** affects the scanning frequency of background scanning. Decreasing this value may result in gaps in maps while scanning at high time warp, but may alleviate some performance issues.
 * The numbers under the **Time Warp Resolution** indicate the following
     * **Vessels:** The number of vessels with any active SCANsat sensors present
 	* **Sensors:** The total number of SCANsat sensors on all vessels; note that all combination sensors are separated into their invidual components, i.e. the Multi-Spectral scanner consists of two sensors, Biomes and Anomalies.
 	* **Passes:** The number of scanning passes recorded per second, this number can easily be in the tens of thousands at high time warp with multiple vessels and sensors active.
+* There are several options related to map exports
+	* **Use Grey Scale** This option uses a true, black-to-white, grey scale for the black and white maps, it affects maps in-game and exports
+	* **Set Map Width** This allows for manually setting the size of the big map; values between 560 and 8192 are acceptable
+	* **Export .csv File** This allows for a .csv file to be exported along with the map texture; this file includes the pixel row, column, latitude, longitude, terrain height
 
-### [:top:][top] 13. Note Concerning Data Sources
+### [:top:][top] 16. Note Concerning Data Sources
 ------------------------------------------
 
 All data this mod shows you is pulled from your game as you play. This
@@ -567,6 +707,7 @@ sneaky then they can of course be sneaky.
 [Olympic1]: http://forum.kerbalspaceprogram.com/members/81815
 [madsailor]: http://forum.kerbalspaceprogram.com/members/123944
 [tinypirate]: http://forum.kerbalspaceprogram.com/members/79868
+[severedsolo]: http://forum.kerbalspaceprogram.com/members/82445
 
 [KSP:developers]: https://kerbalspaceprogram.com/index.php
 [KSP:reddit]: http://www.reddit.com/r/KerbalSpaceProgram
@@ -597,10 +738,11 @@ sneaky then they can of course be sneaky.
 [small-justright]: https://i.imgur.com/Oft4xXP.gif
 [small-mismatch1]: https://i.imgur.com/fNztoUN.gif
 [small-mismatch2]: https://i.imgur.com/aQtTGvV.gif
-[small-newMap1]: http://i.imgur.com/mCnphuZ.gif
+[small-newMap1]: http://i.imgur.com/qS542xo.gif
 [small-toolow-v10]: http://i.imgur.com/USsvSSs.gif
 [small-toohigh-v10]: http://i.imgur.com/i7rGDIj.gif
 [small-justright-v10]: http://i.imgur.com/y7mHvEF.gif
+[small-biome]: http://i.imgur.com/4kZMofq.png
 
 [bigmap-scan-10000x]: http://i.imgur.com/VEPL3oN.gif
 [bigmap-scan-100x]: http://i.imgur.com/bcht47p.gif
@@ -618,10 +760,38 @@ sneaky then they can of course be sneaky.
 [resource-walkthrough]: http://i.imgur.com/KS4FTh0.gif
 [resource-scanner]: http://i.imgur.com/mY0fFjr.gif
 [resource-bigmap]: http://i.imgur.com/JYKG6f5.gif
-[resource-settings]: http://i.imgur.com/sgMklCu.png
+[resource-settings]: http://i.imgur.com/hgZFXIO.png
 [resource-zoom-map-covered]: http://i.imgur.com/7YuYMGW.png
 [resource-zoom-map-uncovered]: http://i.imgur.com/cJ9JtdW.png
 [resource-instant]: http://i.imgur.com/mfIMBEP.gif
+
+[resource-planet-hires-limited-biome]: http://i.imgur.com/yhv2bsq.png
+[resource-planet-hires-full-biome]: http://i.imgur.com/rwy77M3.png
+[resource-planet-lores-limited-biome]: http://i.imgur.com/tR3eTzL.png
+[resource-planet-lores-full-biome]: http://i.imgur.com/kPcO2H7.png
+[resource-planet-in-progress]: http://i.imgur.com/0JBSFbB.png
+[biome-planet-overlay]: http://i.imgur.com/YofnSEI.png
+[biome-planet-in-progress]: http://i.imgur.com/AwQfBgq.png
+[terrain-planet-overlay]: http://i.imgur.com/unxGS3j.png
+[terrain-planet-overlay-tooltip]: http://i.imgur.com/kXsL20Q.png
+
+[resource-bigmap-hires-limited-biome]: http://i.imgur.com/y0jitxK.png
+[resource-bigmap-hires-full-biome]: http://i.imgur.com/fCdXTIq.png
+[resource-bigmap-lores-limited-biome]: http://i.imgur.com/iHCBfes.png
+[resource-bigmap-lores-full-biome]: http://i.imgur.com/TIR1xv5.png
+
+[rpm-multi]: http://i.imgur.com/nXzPtRE.png
+[rpm-mfd-labeled]: http://i.imgur.com/hgFnw2y.png
+[rpm-ALCOR-left]: http://i.imgur.com/9NxK4d6.png
+[rpm-ALCOR-right]: http://i.imgur.com/7GnAdDN.png
+
+[ground-track]: http://i.imgur.com/casTBeW.gif
+
+[resource-overlay-window]: http://i.imgur.com/n68InYq.png
+
+[hidef-map-open]: http://i.imgur.com/xjEDybF.gif
+[hidef-map-comp-1]: http://i.imgur.com/ha7ho9b.png
+[hidef-map-comp-2]: http://i.imgur.com/DtNmVHi.png
 
 [color-window]: http://i.imgur.com/RQVjq6g.png
 [color-palette-switch]: http://i.imgur.com/0XdMGSy.gif
@@ -630,10 +800,10 @@ sneaky then they can of course be sneaky.
 [color-resource]: http://i.imgur.com/9NR8gvP.gif
 [color-biome-stock]: http://i.imgur.com/T14sFzl.png
 
-[instruments-small]: http://i.imgur.com/sZ2MXiK.gif
+[instruments-small]: http://i.imgur.com/tpjveyn.gif
 [instruments-btdt]: http://i.imgur.com/tybbDap.gif
 
-[settings-window]: http://i.imgur.com/MYIfE05.png
+[settings-window]: http://i.imgur.com/5vqEUhX.png
 
 [tinypirate-video-screen]: http://img.youtube.com/vi/UY7eBuReSYU/0.jpg
 [tinypirate-video]: https://www.youtube.com/watch?v=UY7eBuReSYU
@@ -648,35 +818,44 @@ sneaky then they can of course be sneaky.
 [1c]: #top-1c-other-add-ons
 [2]: #top-2-types-of-scans
 [2a]: #top-2a-scansat-scans
-[2b]: #top-2b-resource-scans
-[2c]: #top-2c-resource-setting
-[3]: #top-3-basic-usage
-[3a]: #top-3a-faq-finding-a-good-altitude
-[3b]: #top-3b-mismatched-scanners
-[4]: #top-4-big-map
-[4a]: #top-4a-big-map-options
-[5]: #top-5-zoom-map
-[5a]: #top-5a-target-selection
-[5b]: #top-5b-mechJeb-landing-guidance
-[6]: #top-6-instrument-window
-[7]: #top-7-parts-and-sensor-types
-[7a]: #top-7a-the-radar-altimetry-sensor
-[7b]: #top-7b-the-sar-altimetry-sensor
-[7c]: #top-7c-the-multispectral-sensor
-[7d]: #top-7d-been-there-done-that
-[7e]: #top-7e-maptraq-deprecated
-[8]: #top-8-career-mode-research-and-development
-[8a]: #top-8a-minimum-scan-for-science
-[8b]: #top-8b-getting-maximum-science
-[8c]: #top-8c-contract-support
-[9]: #top-9-color-management
-[9a]: #top-9a-terrain-colors-and-options
-[9b]: #top-9b-biome-colors-and-options
-[9c]: #top-9c-resource-colors-and-options
-[10]: #top-10-background-scanning
-[11]: #top-11-time-warp
-[12]: #top-12-settings-menu
-[13]: #top-13-note-concerning-data-sources
+[3]: #top-3-resource-scanning
+[3a]: #top-3a-stock-scanning-mode
+[3b]: #top-3b-scansat-scanning-mode
+[3c]: #top-3c-resource-settings
+[4]: #top-4-basic-usage
+[4a]: #top-4a-faq-finding-a-good-altitude
+[4b]: #top-4b-mismatched-scanners
+[4c]: #top-4c-biome-map
+[4d]: #top-4d-ground-track-indicators
+[5]: #top-5-big-map
+[5a]: #top-5a-big-map-options
+[6]: #top-6-planetary-overlay
+[6a]: #top-6a-terrain-and-biome-overlays
+[6b]: #top-6b-overlay-control-window
+[7]: #top-7-zoom-map
+[7a]: #top-7a-hi-def-map
+[7b]: #top-7b-target-selection
+[7c]: #top-7c-mechJeb-landing-guidance
+[8]: #top-8-instrument-window
+[9]: #top-9-raster-prop-monitor
+[10]: #top-10-parts-and-sensor-types
+[10a]: #top-10a-the-radar-altimetry-sensor
+[10b]: #top-10b-the-sar-altimetry-sensor
+[10c]: #top-10c-the-multispectral-sensor
+[10d]: #top-10d-been-there-done-that
+[10e]: #top-10e-maptraq-deprecated
+[11]: #top-11-career-mode-research-and-development
+[11a]: #top-11a-minimum-scan-for-science
+[11b]: #top-11b-getting-maximum-science
+[11c]: #top-11c-contract-support
+[12]: #top-12-color-management
+[12a]: #top-12a-terrain-colors-and-options
+[12b]: #top-12b-biome-colors-and-options
+[12c]: #top-12c-resource-colors-and-options
+[13]: #top-13-background-scanning
+[14]: #top-14-time-warp
+[15]: #top-15-settings-menu
+[16]: #top-16-note-concerning-data-sources
 
 [shield:license-bsd]: http://img.shields.io/:license-bsd-blue.svg
 [shield:license-mit]: http://img.shields.io/:license-mit-a31f34.svg
@@ -684,19 +863,19 @@ sneaky then they can of course be sneaky.
  
 [shield:jenkins-dev]: http://img.shields.io/jenkins/s/https/ksp.sarbian.com/jenkins/SCANsat-dev.svg
 [shield:jenkins-rel]: http://img.shields.io/jenkins/s/https/ksp.sarbian.com/jenkins/SCANsat-release.svg
-[shield:support-ksp]: http://img.shields.io/badge/for%20KSP-v1.0.2-bad455.svg
-[shield:support-rpm]: http://img.shields.io/badge/works%20with%20RPM-v0.18.3-a31f34.svg
-[shield:support-mm]: http://img.shields.io/badge/works%20with%20MM-v2.6.2-40b7c0.svg
-[shield:support-toolbar]: http://img.shields.io/badge/works%20with%20Blizzy's%20Toolbar-1.7.9-7c69c0.svg
+[shield:support-ksp]: http://img.shields.io/badge/for%20KSP-v1.4.1-bad455.svg
+[shield:support-rpm]: http://img.shields.io/badge/works%20with%20RPM-v0.28.x-a31f34.svg
+[shield:support-mm]: http://img.shields.io/badge/works%20with%20MM-v3.x-40b7c0.svg
+[shield:support-toolbar]: http://img.shields.io/badge/works%20with%20Blizzy's%20Toolbar-1.7.x-7c69c0.svg
 [shield:support-alcor]: http://img.shields.io/badge/works%20with%20ALCOR-0.9-299bc7.svg
-[shield:support-kspi]: http://img.shields.io/badge/works%20with%20Interstellar-0.13-a62374.svg
-[shield:support-usi]:http://img.shields.io/badge/works%20with%20USI-0.30-34c566.svg
-[shield:support-karbonite]: http://img.shields.io/badge/works%20with%20Karbonite-0.6-ff8c00.svg
-[shield:support-epl]: http://img.shields.io/badge/works%20with%20EPL-4.2.3-ff8c00.svg
-[shield:support-ctt]: http://img.shields.io/badge/works%20with%20CTT-1.1-blue.svg
-[shield:support-ccfg]: https://img.shields.io/badge/works%20with%20Contract%20Configurator-1.0.2-yellowgreen.svg
+[shield:support-kspi]: http://img.shields.io/badge/works%20with%20Interstellar-1.x-a62374.svg
+[shield:support-usi]:http://img.shields.io/badge/works%20with%20USI-0.50.x-34c566.svg
+[shield:support-karbonite]: http://img.shields.io/badge/works%20with%20Karbonite-0.8.x-ff8c00.svg
+[shield:support-epl]: http://img.shields.io/badge/works%20with%20EPL-5.5.x-ff8c00.svg
+[shield:support-ccfg]: https://img.shields.io/badge/works%20with%20Contract%20Configurator-1.20.x+-yellowgreen.svg
 [shield:ckan]: https://img.shields.io/badge/CKAN-Indexed-brightgreen.svg
-[shield:support-mechjeb]: http://img.shields.io/badge/works%20with%20MechJeb-2.5-lightgrey.svg
+[shield:support-mechjeb]: http://img.shields.io/badge/works%20with%20MechJeb-2.5.8-lightgrey.svg
+[shield:support-kopernicus]: http://img.shields.io/badge/works%20with%20Kopernicus-1.2.x-ff8c00.svg
 
 [shield:gittip-tg-img]: http://img.shields.io/gittip/technogeeky.png
 [shield:gittip-tg]: https://www.gittip.com/technogeeky/
@@ -713,6 +892,7 @@ sneaky then they can of course be sneaky.
 [SCANsat:best-orbits-table]: https://www.example.com
 [SCANsat:email]: mailto:SCANscansat@gmail.com
 [SCANsat:gamedata]: http://i.imgur.com/cS1Lu5w.jpg
+[SCANsat:wiki]: https://github.com/S-C-A-N/SCANsat/wiki
 
 [SCANsat:dev-readme]: https://github.com/S-C-A-N/SCANsat/tree/dev/#table-of-contents
 [SCANsat:rel-readme]: https://github.com/S-C-A-N/SCANsat/#table-of-contents
@@ -781,10 +961,12 @@ sneaky then they can of course be sneaky.
 
 [toolbar:release]: http://forum.kerbalspaceprogram.com/threads/60863
 
-[rpm:release]: http://forum.kerbalspaceprogram.com/threads/57603
+[rpm:release]: http://forum.kerbalspaceprogram.com/threads/117471
 
 [cconfig:release]: http://forum.kerbalspaceprogram.com/threads/101604
 
 [ccfgSCANsat:release]: http://forum.kerbalspaceprogram.com/threads/108097
 
-[mechjeb:release]: http://forum.kerbalspaceprogram.com/threads/12384
+[mechjeb:release]: http://forum.kerbalspaceprogram.com/threads/124336
+
+[kopernicus:release]: http://forum.kerbalspaceprogram.com/threads/114649

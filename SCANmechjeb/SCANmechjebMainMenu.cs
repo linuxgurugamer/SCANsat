@@ -32,6 +32,8 @@ namespace SCANmechjeb
 			loaded = checkLoaded();
 
 			print(loaded ? "[SCANsatMechJeb] SCANsat and MechJeb Assemblies Detected" : "[SCANsatMechJeb] SCANsat or MechJeb Assembly Not Detected; Shutting Down...");
+
+			Destroy(gameObject);
 		}
 
 		public static bool Loaded
@@ -69,12 +71,7 @@ namespace SCANmechjeb
 			if (MechJebAssembly == null)
 				return false;
 
-			var fileV = Attribute.GetCustomAttribute(MechJebAssembly.assembly, typeof(AssemblyFileVersionAttribute)) as AssemblyFileVersionAttribute;
-
-			if (fileV == null)
-				return false;
-
-			if (fileV.Version == MechJebVersion.ToString())
+			if (MechJebAssembly.assembly.GetName().Version == MechJebVersion)
 			{
 				SCANsat.SCANmainMenuLoader.MechJebLoaded = true;
 				return true;

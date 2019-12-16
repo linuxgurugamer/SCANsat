@@ -15,6 +15,7 @@ using Contracts;
 using FinePrint.Contracts.Parameters;
 using FinePrint;
 using FinePrint.Utilities;
+using UnityEngine;
 
 namespace SCANsat.SCAN_Data
 {
@@ -22,15 +23,17 @@ namespace SCANsat.SCAN_Data
 	{
 		internal SCANwaypoint(SurveyWaypointParameter p)
 		{
-			way = reflectWaypoint(p);
+			way = p.wp;
 			if (way != null)
 			{
 				band = reflectFlightBand(p);
 				root = p.Root;
+				seed = way.uniqueSeed;
 				param = p;
 				name = way.name;
-				longitude = SCANUtil.fixLonShift(way.longitude);
-				latitude = SCANUtil.fixLatShift(way.latitude);
+				Vector2d coords = SCANUtil.fixRetardCoordinates(new Vector2d(way.longitude, way.latitude));
+				longitude = coords.x;
+				latitude = coords.y;
 				landingTarget = false;
 			}
 		}
@@ -42,10 +45,12 @@ namespace SCANsat.SCAN_Data
 			{
 				band = FlightBand.NONE;
 				root = p.Root;
+				seed = way.uniqueSeed;
 				param = p;
 				name = way.name;
-				longitude = SCANUtil.fixLonShift(way.longitude);
-				latitude = SCANUtil.fixLatShift(way.latitude);
+				Vector2d coords = SCANUtil.fixRetardCoordinates(new Vector2d(way.longitude, way.latitude));
+				longitude = coords.x;
+				latitude = coords.y;
 				landingTarget = false;
 			}
 		}
@@ -55,10 +60,12 @@ namespace SCANsat.SCAN_Data
 			way = p;
 			band = FlightBand.NONE;
 			root = p.contractReference;
+			seed = way.uniqueSeed;
 			param = null;
 			name = way.name;
-			longitude = SCANUtil.fixLonShift(way.longitude);
-			latitude = SCANUtil.fixLatShift(way.latitude);
+			Vector2d coords = SCANUtil.fixRetardCoordinates(new Vector2d(way.longitude, way.latitude));
+			longitude = coords.x;
+			latitude = coords.y;
 			landingTarget = false;
 		}
 
@@ -66,6 +73,7 @@ namespace SCANsat.SCAN_Data
 		{
 			way = null;
 			band = FlightBand.NONE;
+			seed = Random.Range(0, int.MaxValue);
 			root = null;
 			param = null;
 			name = n;
@@ -78,6 +86,7 @@ namespace SCANsat.SCAN_Data
 		private string name;
 		private double longitude;
 		private double latitude;
+		private int seed;
 		private FlightBand band;
 		private Contract root;
 		private ContractParameter param;
@@ -91,6 +100,11 @@ namespace SCANsat.SCAN_Data
 		public string Name
 		{
 			get { return name; }
+		}
+
+		public int Seed
+		{
+			get { return seed; }
 		}
 
 		public Contract Root
@@ -121,14 +135,6 @@ namespace SCANsat.SCAN_Data
 		public bool LandingTarget
 		{
 			get { return landingTarget; }
-		}
-
-		private Waypoint reflectWaypoint(SurveyWaypointParameter p)
-		{
-			if (SCANmainMenuLoader.FinePrintWaypoint)
-				return SCANreflection.FinePrintWaypointObject(p);
-
-			return null;
 		}
 
 		private Waypoint reflectWaypoint(StationaryPointParameter p)

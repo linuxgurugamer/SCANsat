@@ -34,6 +34,7 @@ namespace SCANsat.SCAN_Platform
 
 		public virtual void OnDecodeFromConfigNode() { }
 		public virtual void OnEncodeToConfigNode() { }
+		public virtual void onSavePost() { }
 
 		public bool Load() { return Load(FilePath); }
 		public bool Load(string fileFullName)
@@ -55,9 +56,34 @@ namespace SCANsat.SCAN_Platform
 			}
 			catch (Exception ex)
 			{
-				Log.Now("Failed to Load ConfigNode from file ({0}) - Error:{1}", fileFullName, ex.Message);
+				Log.Now("Failed to Load ConfigNode from file ({0}) - Error:{1}", fileFullName, ex);
 				Log.Now("Storing old config - {0}", fileFullName + ".err-" + timeNow);
 				System.IO.File.Copy(fileFullName, fileFullName + ".err-" + timeNow, true);
+				return false;
+			}
+		}
+
+		public bool LoadSavedCopy()
+		{
+			try
+			{
+				Log.Debug("Loading ConfigNode");
+				if (FileExists)
+				{
+					ConfigNode cnToLoad = ConfigNode.Load(FilePath);
+					ConfigNode cnUnwrapped = cnToLoad.GetNode(this.GetType().Name);
+					ConfigNode.LoadObjectFromConfig(this, cnUnwrapped);
+					return true;
+				}
+				else
+				{
+					Log.Now("File could not be found to load after saving new copy ({0})", FilePath);
+					return false;
+				}
+			}
+			catch (Exception ex)
+			{
+				Log.Now("Failed to Load ConfigNode from file after saving ({0}) - Error:{1}", FilePath, ex.Message);
 				return false;
 			}
 		}
@@ -75,6 +101,7 @@ namespace SCANsat.SCAN_Platform
 				ConfigNode cnSaveWrapper = new ConfigNode(GetType().Name);
 				cnSaveWrapper.AddNode(cnToSave);
 				cnSaveWrapper.Save(fileFullName);
+				onSavePost();
 				return true;
 			}
 			catch (Exception ex)

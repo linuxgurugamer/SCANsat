@@ -37,24 +37,29 @@ namespace SCANsat.SCAN_Data
 		[Persistent]
 		private List<SCANresourceBody> Resource_Planetary_Config = new List<SCANresourceBody>();
 
-		private Dictionary<string, SCANresourceBody> masterBodyConfigs = new Dictionary<string,SCANresourceBody>();
+		private DictionaryValueList<string, SCANresourceBody> masterBodyConfigs = new DictionaryValueList<string, SCANresourceBody>();
 
 		private SCANtype sType;
 		private SCANresourceType resourceType;
 
 		private Color defaultLowColor;
 		private Color defaultHighColor;
+		private Color32 lowColor32;
+		private Color32 highColor32;
 		private float defaultTrans;
-		private Texture2D mapOverlay;
+		private string displayName;
 
 		private SCANresourceBody currentBody;
 
-		internal SCANresourceGlobal(string resource, float trans, float defMin, float defMax, Color minC, Color maxC, SCANresourceType t)
+		internal SCANresourceGlobal(string resource, string display, float trans, float defMin, float defMax, Color minC, Color maxC, SCANresourceType t)
 		{
 			name = resource;
+			displayName = display;
 			resourceTransparency = trans;
 			lowResourceColor = minC;
 			highResourceColor = maxC;
+			lowColor32 = (Color32)lowResourceColor;
+			highColor32 = (Color32)highResourceColor;
 			defaultMinValue = defMin;
 			defaultMaxValue = defMax;
 			resourceType = t;
@@ -70,9 +75,12 @@ namespace SCANsat.SCAN_Data
 		internal SCANresourceGlobal(SCANresourceGlobal copy)
 		{
 			name = copy.name;
+			displayName = copy.displayName;
 			resourceTransparency = copy.resourceTransparency;
 			lowResourceColor = copy.lowResourceColor;
 			highResourceColor = copy.highResourceColor;
+			lowColor32 = copy.lowColor32;
+			highColor32 = copy.highColor32;
 			sType = copy.sType;
 			resourceType = copy.resourceType;
 			masterBodyConfigs = copyBodyConfigs(copy);
@@ -83,13 +91,16 @@ namespace SCANsat.SCAN_Data
 			defaultMaxValue = copy.defaultMaxValue;
 		}
 
-		private Dictionary<string, SCANresourceBody> copyBodyConfigs(SCANresourceGlobal c)
+		private DictionaryValueList<string, SCANresourceBody> copyBodyConfigs(SCANresourceGlobal c)
 		{
-			Dictionary<string, SCANresourceBody> newCopy = new Dictionary<string, SCANresourceBody>();
-			foreach (SCANresourceBody r in c.masterBodyConfigs.Values)
+			DictionaryValueList<string, SCANresourceBody> newCopy = new DictionaryValueList<string, SCANresourceBody>();
+			int l = c.masterBodyConfigs.Count;
+
+			for (int i = 0; i < l; i++)
 			{
+				SCANresourceBody r = c.masterBodyConfigs.At(i);	
 				SCANresourceBody newR = new SCANresourceBody(r);
-				if (!newCopy.ContainsKey(newR.BodyName))
+				if (!newCopy.Contains(newR.BodyName))
 					newCopy.Add(newR.BodyName, newR);
 			}
 
@@ -99,12 +110,29 @@ namespace SCANsat.SCAN_Data
 		public override void OnDecodeFromConfigNode()
 		{
 			resourceType = SCANcontroller.getResourceType(name);
+			if (resourceType == null)
+				return;
+
 			sType = resourceType.Type;
+
+			lowColor32 = (Color32)lowResourceColor;
+			highColor32 = (Color32)highResourceColor;
 
 			setDefaultValues();
 			try
 			{
-				masterBodyConfigs = Resource_Planetary_Config.ToDictionary(a => a.BodyName, a => a);
+				int l = Resource_Planetary_Config.Count;
+
+				for (int i = 0; i < l; i++)
+				{
+					SCANresourceBody r = Resource_Planetary_Config[i];
+
+					if (r == null)
+						continue;
+
+					if (!masterBodyConfigs.Contains(r.BodyName))
+						masterBodyConfigs.Add(r.BodyName, r);
+				}
 			}
 			catch (Exception e)
 			{
@@ -133,7 +161,7 @@ namespace SCANsat.SCAN_Data
 
 		public void addToBodyConfigs(string s, SCANresourceBody r, bool warn)
 		{
-			if (!masterBodyConfigs.ContainsKey(s))
+			if (!masterBodyConfigs.Contains(s))
 				masterBodyConfigs.Add(s, r);
 			else if (warn)
 				Debug.LogError(string.Format("[SCANsat] Warning: SCANresource Dictionary Already Contains Key Of This Type: [{0}] For Body: [{1}]", r.ResourceName, s));
@@ -154,6 +182,12 @@ namespace SCANsat.SCAN_Data
 			get { return name; }
 		}
 
+		public string DisplayName
+		{
+			get { return displayName; }
+			set { displayName = value; }
+		}
+
 		public float Transparency
 		{
 			get { return resourceTransparency; }
@@ -171,13 +205,31 @@ namespace SCANsat.SCAN_Data
 		public Color MinColor
 		{
 			get { return lowResourceColor; }
-			internal set { lowResourceColor = value; }
+			internal set
+			{
+				lowResourceColor = value;
+				lowColor32 = (Color32)value;
+			}
 		}
 
 		public Color MaxColor
 		{
 			get { return highResourceColor; }
-			internal set { highResourceColor = value; }
+			internal set
+			{
+				highResourceColor = value;
+				highColor32 = (Color32)value;
+			}
+		}
+
+		public Color32 MinColor32
+		{
+			get { return lowColor32; }
+		}
+
+		public Color32 MaxColor32
+		{
+			get { return highColor32; }
 		}
 
 		public float DefaultMinValue
@@ -217,7 +269,7 @@ namespace SCANsat.SCAN_Data
 
 		public SCANresourceBody getBodyConfig (string body, bool warn = true)
 		{
-			if (masterBodyConfigs.ContainsKey(body))
+			if (masterBodyConfigs.Contains(body))
 				return masterBodyConfigs[body];
 			else if (warn)
 				SCANUtil.SCANlog("SCANsat resource celestial body config: [{0}] is empty; something probably went wrong here", body);
@@ -227,8 +279,8 @@ namespace SCANsat.SCAN_Data
 
 		public SCANresourceBody getBodyConfig (int i)
 		{
-			if (masterBodyConfigs.Count >= i)
-				return masterBodyConfigs.ElementAt(i).Value;
+			if (masterBodyConfigs.Count > i)
+				return masterBodyConfigs.At(i);
 			else
 				SCANUtil.SCANlog("SCANsat resource celestial body config is empty; something probably went wrong here");
 
@@ -237,10 +289,10 @@ namespace SCANsat.SCAN_Data
 
 		public void CurrentBodyConfig(string body)
 		{
-			if (masterBodyConfigs.ContainsKey(body))
+			if (masterBodyConfigs.Contains(body))
 				currentBody = masterBodyConfigs[body];
 			else
-				currentBody = masterBodyConfigs.ElementAt(0).Value;
+				currentBody = masterBodyConfigs.At(0);
 		}
 
 		public SCANresourceBody CurrentBody
@@ -261,12 +313,6 @@ namespace SCANsat.SCAN_Data
 		public float DefaultTrans
 		{
 			get { return defaultTrans; }
-		}
-
-		public Texture2D MapOverlay
-		{
-			get { return mapOverlay; }
-			set { mapOverlay = value; }
 		}
 	}
 }
